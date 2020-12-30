@@ -1,4 +1,7 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Tray, Menu } = require('electron');
+const path = require('path')
+const iconPath = path.join(__dirname, "Sandbag.png");
+let tray = null
 
 function createWindow () {
   const win = new BrowserWindow({
@@ -8,6 +11,17 @@ function createWindow () {
       nodeIntegration: true,
       enableRemoteModule: true
     }
+  })
+
+  win.on('minimize', () => {
+    win.hide();
+    tray = new Tray(iconPath);
+    tray.setToolTip('Slippi Replay Formatter')
+
+    tray.on('click', () => {
+      win.show();
+      tray.destroy();
+    })
   })
 
   win.loadFile('main.html')
