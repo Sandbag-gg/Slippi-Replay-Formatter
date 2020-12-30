@@ -12,3 +12,5 @@
 * Replay file icon replacement
 
 ### Current features:
+* Minimize to tray
+* Manual replay renaming
