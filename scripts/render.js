@@ -1,4 +1,4 @@
-  
+
 const { dialog } = require('electron').remote;
 
 const fs = require('fs');
@@ -21,8 +21,8 @@ pathButton.onclick = e => {
       });
 };
 
-formatButton.onclick = async e => {
-    parseReplays(replayPath);
+formatButton.onclick = async function(e) {
+    await parseReplays(replayPath);
 };
 
 //prevents user from typing invalid file name characters
@@ -52,13 +52,24 @@ async function parseReplays(path) {
     progressBar.value = 0
 
     //loop through each file in directory and parse
-    fs.readdir(path, (err, files) => {
+    fs.readdir(path, async (err, files) => {
         const length = files.length;
+        progressBar.max = length - 1;
 
-        for (let i = 0; i < length; i++) {
+        let i = 0;
+
+        //im going to be real
+        //I don't know why this works but a for loop doesn't
+        //But it does
+        (function doParse() {
             parseReplay(path + "\\" + files[i], path);
-            progressBar.value = (i/length) * 100;
-        }
+            progressBar.value = i;
+
+            i++
+            if(i<length) {
+                setTimeout(doParse, 0)
+            }
+        })();
     });
 
     return true;
@@ -66,11 +77,11 @@ async function parseReplays(path) {
 
 //parse individual replay files
 async function parseReplay(replay, path) {
-    if(checkIfReplay(replay)) {
+    if(await checkIfReplay(replay)) {
         const stats = fs.lstatSync(replay);
         let output = replayFormat.value;
         //day of week, month, day, year, hour:minute:second, GMT, (timezone)
-        let date = stats.ctime.toString().split(' ');
+        let date = stats.mtime.toString().split(' ');
 
         //there is definitely a better way to do this but this works for now
         output = output.replaceAll("{day}", date[0]);
@@ -85,26 +96,29 @@ async function parseReplay(replay, path) {
 
         if(fs.existsSync(output)) {
             renameFile(replay, output.substring(0, output.length - 4), 0);
-        } else { 
+        } else {
             await fs.rename(replay, output, err => {
-                if (err) throw err;
-            }); 
+                if (err) {
+                    parseReplay(replay, path);
+                    throw err;
+                }
+            });
         }
 
     } else {console.log(replay + " is not a replay");}
 }
 
 //checks if given path is file and ends with slippi replay extension
-function checkIfReplay(file) {
+async function checkIfReplay(file) {
     if(fs.lstatSync(file).isFile() && file.endsWith(".slp")) {
         return true;
     } else { return false; }
 }
 
-function renameFile(oldFilePath, filePath, iterator) {
+async function renameFile(oldFilePath, filePath, iterator) {
     if(fs.existsSync(filePath + '(' + iterator + ')' + ".slp")) {
         renameFile(oldFilePath, filePath, iterator + 1);
-    } else { 
+    } else {
         fs.rename(oldFilePath, filePath + '(' + iterator + ')' + ".slp", err => {
             if (err) throw err;
         });
