@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/Sandbag-gg/Slippi-Replay-Formatter/issues"
   },
-  "homepage": "https://github.com/Sandbag-gg/Slippi-Replay-Formatter#readme"
+  "homepage": "https://github.com/Sandbag-gg/Slippi-Replay-Formatter#readme",
+  "devDependencies": {
+    "electron": "^11.1.1"
+  }
 }
