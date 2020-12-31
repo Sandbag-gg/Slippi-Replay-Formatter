@@ -1,25 +1,43 @@
-
 const { dialog } = require('electron').remote;
+var chokidar = require('chokidar');
 
 const fs = require('fs');
 
-//buttons
+//dom elements
 const formatButton = document.getElementById("formatBtn");
 const pathButton = document.getElementById("pathBtn");
 const progressBar = document.getElementById("progBar");
 const directoryArea = document.getElementById("directoryArea");
 const replayFormat = document.getElementById("nameFormat");
+const watchDirToggle = document.getElementById("watchDirToggle");
+const debugOutput = document.getElementById("debugOutput");
 
-const invalidChars = ['<', '>', ':', '/', '\\', '|', '?', '*']
+var watcher;
+const invalidChars = ['<', '>', ':', '/', '\\', '|', '?', '*'];
 
 let replayPath = "";
 
 pathButton.onclick = e => {
+    if(watcher != null) {
+        watcher.close().then(debugOutput.value += "watcher closed \n");
+    }
     getDirectory().then(value => {
         replayPath = value.filePaths[0];
         directoryArea.innerHTML = replayPath;
-      });
+       
+        if(watchDirToggle.checked) {
+            createWatcher(replayPath);
+        }
+    });
 };
+
+watchDirToggle.onchange = async e => {
+    if(!watchDirToggle.checked && watcher != null) {
+            watcher.close().then(debugOutput.value += "watcher closed \n");
+    } else if(watchDirToggle.checked && replayPath != null && replayPath != "") {
+        createWatcher(replayPath)
+    }
+}   
 
 formatButton.onclick = async function(e) {
     await parseReplays(replayPath);
@@ -32,6 +50,30 @@ replayFormat.oninput = e => {
     }
 }
 
+function createWatcher(watchPath) {
+    watcher = chokidar.watch(watchPath, {
+        ignored: /(^|[\/\\])\../, // ignore dotfiles
+        persistent: true,
+        ignoreInitial: true,
+        awaitWriteFinish: {
+            stabilityThreshold: 5000,
+            pollInterval: 5000
+          },
+    });
+
+    watcher.on('ready', () => {
+        debugOutput.value += "now watching \n";
+    });
+
+    watcher.on('add', async path => {
+        debugOutput.value += "new file: " + path + "\n";
+        checkIfReplay(path).then(result => {
+            if(result) {
+                debugOutput.value += "New file is replay \n";
+            } else { debugOutput.value += "New file is not replay \n"; }
+        });
+    });
+}
 
 //opens file dialog and returns selected directory
 async function getDirectory() {
@@ -114,6 +156,7 @@ async function checkIfReplay(file) {
         return true;
     } else { return false; }
 }
+
 
 async function renameFile(oldFilePath, filePath, iterator) {
     if(fs.existsSync(filePath + '(' + iterator + ')' + ".slp")) {
