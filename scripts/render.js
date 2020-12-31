@@ -1,7 +1,9 @@
 const { dialog } = require('electron').remote;
 var chokidar = require('chokidar');
-
 const fs = require('fs');
+
+import replayCheck from './checkIfReplay.js';
+import {parseReplays, parseReplay} from './parsing.js'
 
 //dom elements
 const formatButton = document.getElementById("formatBtn");
@@ -40,7 +42,7 @@ watchDirToggle.onchange = async e => {
 }   
 
 formatButton.onclick = async function(e) {
-    await parseReplays(replayPath);
+    await parseReplays(replayPath, replayFormat, progressBar);
 };
 
 //prevents user from typing invalid file name characters
@@ -67,7 +69,7 @@ function createWatcher(watchPath) {
 
     watcher.on('add', async path => {
         debugOutput.value += "new file: " + path + "\n";
-        checkIfReplay(path).then(result => {
+        replayCheck(path).then(result => {
             if(result) {
                 debugOutput.value += "New file is replay \n";
             } else { debugOutput.value += "New file is not replay \n"; }
@@ -85,85 +87,4 @@ async function getDirectory() {
     });
 
     return directoryPath;
-}
-
-//parse directory of replays
-async function parseReplays(path) {
-    if(path == "" || path == null) {return false;}
-    if(replayFormat.value == "" || replayFormat.value == null) { return false; }
-    progressBar.value = 0
-
-    //loop through each file in directory and parse
-    fs.readdir(path, async (err, files) => {
-        const length = files.length;
-        progressBar.max = length - 1;
-
-        let i = 0;
-
-        //im going to be real
-        //I don't know why this works but a for loop doesn't
-        //But it does
-        (function doParse() {
-            parseReplay(path + "\\" + files[i], path);
-            progressBar.value = i;
-
-            i++
-            if(i<length) {
-                setTimeout(doParse, 0)
-            }
-        })();
-    });
-
-    return true;
-}
-
-//parse individual replay files
-async function parseReplay(replay, path) {
-    if(await checkIfReplay(replay)) {
-        const stats = fs.lstatSync(replay);
-        let output = replayFormat.value;
-        //day of week, month, day, year, hour:minute:second, GMT, (timezone)
-        let date = stats.mtime.toString().split(' ');
-
-        //there is definitely a better way to do this but this works for now
-        output = output.replaceAll("{day}", date[0]);
-        output = output.replaceAll("{month}", date[1]);
-        output = output.replaceAll("{date}", date[2]);
-        output = output.replaceAll("{year}", date[3]);
-        output = output.replaceAll("{hour}", date[4].split(':')[0]);
-        output = output.replaceAll("{minute}", date[4].split(':')[1]);
-        output = output.replaceAll("{second}", date[4].split(':')[2]);
-
-        output = path + "\\" + output + ".slp";
-
-        if(fs.existsSync(output)) {
-            renameFile(replay, output.substring(0, output.length - 4), 0);
-        } else {
-            await fs.rename(replay, output, err => {
-                if (err) {
-                    parseReplay(replay, path);
-                    throw err;
-                }
-            });
-        }
-
-    } else {console.log(replay + " is not a replay");}
-}
-
-//checks if given path is file and ends with slippi replay extension
-async function checkIfReplay(file) {
-    if(fs.lstatSync(file).isFile() && file.endsWith(".slp")) {
-        return true;
-    } else { return false; }
-}
-
-
-async function renameFile(oldFilePath, filePath, iterator) {
-    if(fs.existsSync(filePath + '(' + iterator + ')' + ".slp")) {
-        renameFile(oldFilePath, filePath, iterator + 1);
-    } else {
-        fs.rename(oldFilePath, filePath + '(' + iterator + ')' + ".slp", err => {
-            if (err) throw err;
-        });
-    }
 }

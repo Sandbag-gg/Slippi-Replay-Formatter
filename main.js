@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Tray, Menu } = require('electron');
 const path = require('path')
-const iconPath = path.join(__dirname, "Sandbag.png");
+const iconPath = path.join(__dirname, "/img/Sandbag.png");
 let tray = null
 
 function createWindow () {
