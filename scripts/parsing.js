@@ -42,7 +42,7 @@ export async function parseReplay(replay, path, replayFormat) {
         //there is definitely a better way to do this but this works for now
         output = output.replaceAll("{day}", date[0]);
         output = output.replaceAll("{month}", date[1]);
-        output = output.replaceAll("{date}", date[2]);
+        output = output.replaceAll("{dayNum}", date[2]);
         output = output.replaceAll("{year}", date[3]);
         output = output.replaceAll("{hour}", date[4].split(':')[0]);
         output = output.replaceAll("{minute}", date[4].split(':')[1]);
@@ -51,25 +51,29 @@ export async function parseReplay(replay, path, replayFormat) {
         output = path + "\\" + output + ".slp";
 
         if(fs.existsSync(output)) {
-            renameFile(replay, output.substring(0, output.length - 4), 0);
+            output = renameFile(replay, output.substring(0, output.length - 4), 0);
         } else {
             await fs.rename(replay, output, err => {
                 if (err) {
-                    parseReplay(replay, path);
+                    parseReplay(replay, path, replayFormat);
                     throw err;
-                }
+                } 
             });
+           
         }
 
+        return output;
     } else {console.log(replay + " is not a replay");}
 }
 
 async function renameFile(oldFilePath, filePath, iterator) {
     if(fs.existsSync(filePath + '(' + iterator + ')' + ".slp")) {
-        renameFile(oldFilePath, filePath, iterator + 1);
+        return renameFile(oldFilePath, filePath, iterator + 1);
     } else {
-        fs.rename(oldFilePath, filePath + '(' + iterator + ')' + ".slp", err => {
+        const name = filePath + '(' + iterator + ')' + ".slp"
+        fs.rename(oldFilePath, name, err => {
             if (err) throw err;
         });
+        return name
     }
 }

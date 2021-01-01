@@ -1,6 +1,5 @@
 const { dialog } = require('electron').remote;
 var chokidar = require('chokidar');
-const fs = require('fs');
 
 import replayCheck from './checkIfReplay.js';
 import {parseReplays, parseReplay} from './parsing.js'
@@ -15,8 +14,6 @@ const watchDirToggle = document.getElementById("watchDirToggle");
 const debugOutput = document.getElementById("debugOutput");
 
 var watcher;
-const invalidChars = ['<', '>', ':', '/', '\\', '|', '?', '*'];
-
 let replayPath = "";
 
 pathButton.onclick = e => {
@@ -47,6 +44,7 @@ formatButton.onclick = async function(e) {
 
 //prevents user from typing invalid file name characters
 replayFormat.oninput = e => {
+    const invalidChars = ['<', '>', ':', '/', '\\', '|', '?', '*'];
     for (let i = 0; i < invalidChars.length; i++) {
         replayFormat.value = replayFormat.value.replaceAll(invalidChars[i], "");
     }
@@ -67,11 +65,18 @@ function createWatcher(watchPath) {
         debugOutput.value += "now watching \n";
     });
 
-    watcher.on('add', async path => {
+    watcher.on('add', async function(path) {
         debugOutput.value += "new file: " + path + "\n";
-        replayCheck(path).then(result => {
+        replayCheck(path).then(async result => {
             if(result) {
                 debugOutput.value += "New file is replay \n";
+                if(replayFormat.value == "" || replayFormat.value == null) { return false; }
+                else {
+                    parseReplay(path, replayPath, replayFormat).then(output => {
+                        watcher.unwatch(output);
+                        debugOutput.value += "File formatted to: " + output + "\n";
+                    });
+                }
             } else { debugOutput.value += "New file is not replay \n"; }
         });
     });
