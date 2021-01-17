@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { default: SlippiGame, stages } = require('@slippi/slippi-js');
+const { default: SlippiGame } = require('@slippi/slippi-js');
 import checkIfReplay from './checkIfReplay.js';
 import getGameData from './gameData.js';
 
@@ -43,22 +43,28 @@ export async function parseReplay(replay, path, replayFormat) {
         //day of week, month, day, year, hour:minute:second, GMT, (timezone)
         let date = stats.mtime.toString().split(' ');
 
-        //there is definitely a better way to do this but this works for now
-        //this will most likely be replaced in the future
-        output = output.replaceAll("{day}", date[0]);
-        output = output.replaceAll("{month}", date[1]);
-        output = output.replaceAll("{dayNum}", date[2]);
-        output = output.replaceAll("{year}", date[3]);
-        output = output.replaceAll("{hour}", date[4].split(':')[0]);
-        output = output.replaceAll("{minute}", date[4].split(':')[1]);
-        output = output.replaceAll("{second}", date[4].split(':')[2]);
-        output = output.replaceAll("{stage}", gameData.stage); 
-        output = output.replaceAll("{p1tag}", gameData.port1.tag);
-        output = output.replaceAll("{p2tag}", gameData.port2.tag);
-        output = output.replaceAll("{p1char}", gameData.port1.character);
-        output = output.replaceAll("{p2char}", gameData.port2.character);
-        output = output.replaceAll("{p1code}", gameData.port1.code);
-        output = output.replaceAll("{p2code}", gameData.port2.code);
+        //the variables user can type into the replay name input box and their corresponding value
+        var outputVars = [
+            ["{day}", date[0]],
+            ["{month}", date[1]],
+            ["{dayNum}", date[2]],
+            ["{year}", date[3]],
+            ["{hour}", date[4].split(':')[0]],
+            ["{minute}", date[4].split(':')[1]],
+            ["{second}", date[4].split(':')[2]],
+            ["{stage}", gameData.stage],
+            ["{p1char}", gameData.port1.character],
+            ["{p1tag}", gameData.port1.tag],
+            ["{p1code}", gameData.port1.code],
+            ["{p2char}", gameData.port2.character],
+            ["{p2tag}", gameData.port2.tag],
+            ["{p2code}", gameData.port2.code],
+        ];
+
+        //loop through each variable in output string and replace with value
+        for (let i = 0; i < outputVars.length; i++) {
+            output = output.replaceAll(outputVars[i][0], outputVars[i][1]);
+        }
 
         output = path + "\\" + output + ".slp";
 

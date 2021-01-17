@@ -5,7 +5,6 @@
 * CSS
 
 ### Potential features:
-* Replay file icon replacement
 * Automatic replay sorting
 * Rename with win/loss result
 

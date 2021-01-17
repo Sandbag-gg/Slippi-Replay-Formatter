@@ -1,9 +1,9 @@
-const { default: SlippiGame, stages, characters } = require('@slippi/slippi-js');
+const { stages, characters } = require('@slippi/slippi-js');
 
+//gets relevant data from game and returns object
 export default function getGameData(game) {
     const settings = game.getSettings();
     const metadata = game.getMetadata();
-    console.log(metadata);
     const data = {
         stage: stages.getStageName(settings.stageId),
         port1: {
