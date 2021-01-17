@@ -1,16 +1,20 @@
 # Slippi Replay Formatter
 
 ### Planned features:
-* Automatic replay sorting
 * Automatic deleting of old replays
-* Advanced replay renaming
-    * Player character
-    * Win/Loss result
+* CSS
 
 ### Potential features:
 * Replay file icon replacement
+* Automatic replay sorting
+* Rename with win/loss result
 
 ### Current features:
 * Minimize to tray
 * bulk replay renaming
 * Automatic replay renaming
+* Advanced replay renaming
+    * Player character
+    * Stage
+    * Player tag
+    * Player code
