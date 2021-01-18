@@ -1,0 +1,44 @@
+body {
+  background-color: #49475B;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-y: hidden;
+}
+
+body button {
+  color: white;
+  background-color: #799496;
+  -webkit-transition-duration: 0.4s;
+          transition-duration: 0.4s;
+  border: 2px solid #49475B;
+  border-radius: 4px;
+}
+
+body button:hover {
+  background-color: #627a7c;
+  border: 2px solid #ACC196;
+}
+
+#debugOutput {
+  margin-top: 10px;
+  height: 42vh;
+  width: 98%;
+  resize: none;
+  border-radius: 4px;
+  border: 0px;
+}
+
+#nameFormat {
+  border-radius: 4px;
+  border: 0px;
+}
+
+#directoryArea {
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
+*:focus {
+  outline: none;
+}
+/*# sourceMappingURL=main.css.map */

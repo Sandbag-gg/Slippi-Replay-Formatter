@@ -1,0 +1,47 @@
+$mainColor : #49475B;
+$secondaryColor : #799496;
+$secondaryColorDark : #627a7c;
+$thirdColor : #ACC196;
+
+body {
+    background-color: $mainColor;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-y: hidden;
+
+    button {
+        color: white;
+        background-color: $secondaryColor;
+        transition-duration: 0.4s;
+        border: 2px solid $mainColor;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: $secondaryColorDark;
+            border: 2px solid $thirdColor;
+        }  
+    }
+}
+
+#debugOutput {
+    margin-top: 10px;
+    height: 42vh;
+    width: 98%;
+    resize: none;
+    border-radius: 4px;
+    border: 0px;
+}
+
+#nameFormat {
+    border-radius: 4px;
+    border: 0px;
+}
+
+#directoryArea {
+    margin-bottom: 12px;
+    margin-top: 12px;
+}
+
+*:focus {
+    outline: none;
+}

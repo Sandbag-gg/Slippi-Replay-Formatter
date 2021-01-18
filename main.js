@@ -5,13 +5,16 @@ let tray = null
 
 function createWindow () {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 380,
+    height: 260,
+    icon: iconPath,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
     }
   })
+
+  Menu.setApplicationMenu(null)
 
   win.on('minimize', () => {
     win.hide();

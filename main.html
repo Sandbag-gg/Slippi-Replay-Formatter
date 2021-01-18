@@ -10,13 +10,11 @@
     <body>
         <button id="formatBtn" >Format</button>
         <button id="pathBtn" >Set Replay Path</button>
+        <input type="checkbox" id="watchDirToggle"> Watch Dir
         <p id="directoryArea">Replay Directory</p>
-        <input type="text" id="nameFormat">
-        <br>
+        <input type="text" id="nameFormat" placeholder="Replay Name Format">
         <progress id="progBar" value="0" max="100"></progress>
         <br>
-        <input type="checkbox" id="watchDirToggle"> Watch Dir
-        <br>
-        <textarea readonly id="debugOutput"></textarea>
+        <textarea readonly id="debugOutput" placeholder="Log"></textarea>
     </body>
 </html>
