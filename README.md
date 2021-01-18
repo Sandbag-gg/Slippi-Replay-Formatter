@@ -2,7 +2,6 @@
 
 ### Planned features:
 * Automatic deleting of old replays
-* CSS
 
 ### Potential features:
 * Automatic replay sorting
@@ -17,3 +16,4 @@
     * Stage
     * Player tag
     * Player code
+* Cool CSS
