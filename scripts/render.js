@@ -4,6 +4,7 @@ var AutoLaunch = require('auto-launch');
 
 import replayCheck from './checkIfReplay.js';
 import {parseReplays, parseReplay} from './parsing.js'
+import insertTempaltes from './templateHandeler.js';
 
 //dom elements
 const formatButton = document.getElementById("formatBtn");
@@ -107,3 +108,6 @@ async function getDirectory() {
 
     return directoryPath;
 }
+
+//load replay name templates
+insertTempaltes("./data/templates.json", "templates");

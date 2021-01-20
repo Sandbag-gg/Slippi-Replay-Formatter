@@ -6,7 +6,7 @@ let tray = null
 function createWindow () {
   const win = new BrowserWindow({
     width: 480,
-    height: 260,
+    height: 300,
     icon: iconPath,
     webPreferences: {
       nodeIntegration: true,

@@ -1,0 +1,10 @@
+{
+    "templates": [
+        "{p1tag} {p1char} vs {p2tag} {p2char}",
+        "{p1tag} {p1char} vs {p2tag} {p2char} on {stage}",
+        "{p1tag} vs {p2tag}",
+        "{p1tag} vs {p2tag} on {stage}",
+        "{p1code} vs {p2code}",
+        "{p1code} vs {p2code} on stage"
+    ]
+}

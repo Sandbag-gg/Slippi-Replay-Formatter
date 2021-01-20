@@ -24,7 +24,6 @@ Variable | Output
 {p2code} | Port 2's Slippi Code
 
 ### Planned features:
-* Replay name format templates
 * Persistent replay name format
 
 ### Potential features:
@@ -33,8 +32,6 @@ Variable | Output
 * Rename with win/loss result
 
 ### Current features:
-* Minimize to tray
-* Launch on PC startup
 * Bulk replay renaming
 * Automatic replay renaming
 * Advanced replay renaming
@@ -42,4 +39,7 @@ Variable | Output
     * Stage
     * Player tag
     * Player code
+* Replay name format templates
+* Minimize to tray
+* Launch on PC startup
 * Cool CSS
