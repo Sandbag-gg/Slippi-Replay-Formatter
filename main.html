@@ -14,7 +14,7 @@
         <input type="checkbox" id="startupToggle"> Launch on Startup
         <p id="directoryArea">Replay Directory</p>
         <input type="text" id="nameFormat" placeholder="Replay Name Format" list="templates">
-        <datalist class="datalist" id="templates">
+        <datalist oninput="test()" class="datalist" id="templates">
         </datalist>
         <progress id="progBar" value="0" max="100"></progress>
         <br>

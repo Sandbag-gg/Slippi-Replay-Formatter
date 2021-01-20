@@ -4,7 +4,7 @@ var AutoLaunch = require('auto-launch');
 
 import replayCheck from './checkIfReplay.js';
 import {parseReplays, parseReplay} from './parsing.js'
-import insertTempaltes from './templateHandeler.js';
+import {insertTemplates, insertLastFormat, saveFormat} from './formatHandeler.js';
 
 //dom elements
 const formatButton = document.getElementById("formatBtn");
@@ -22,6 +22,7 @@ var AutoLauncher = new AutoLaunch({
 
 var watcher;
 let replayPath = "";
+let formatTimeout;
 
 pathButton.onclick = e => {
     if(watcher != null) {
@@ -63,6 +64,10 @@ replayFormat.oninput = e => {
     for (let i = 0; i < invalidChars.length; i++) {
         replayFormat.value = replayFormat.value.replaceAll(invalidChars[i], "");
     }
+    if(formatTimeout != null) clearTimeout(formatTimeout);
+    formatTimeout = setTimeout(() => {
+        saveFormat("./data/user.json", replayFormat);
+    }, 10000);
 }
 
 function createWatcher(watchPath) {
@@ -110,4 +115,5 @@ async function getDirectory() {
 }
 
 //load replay name templates
-insertTempaltes("./data/templates.json", "templates");
+insertTemplates("./data/templates.json", "templates");
+insertLastFormat("./data/user.json", replayFormat);
