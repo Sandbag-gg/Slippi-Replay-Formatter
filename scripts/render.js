@@ -1,5 +1,6 @@
 const { dialog } = require('electron').remote;
 var chokidar = require('chokidar');
+var AutoLaunch = require('auto-launch');
 
 import replayCheck from './checkIfReplay.js';
 import {parseReplays, parseReplay} from './parsing.js'
@@ -12,6 +13,11 @@ const directoryArea = document.getElementById("directoryArea");
 const replayFormat = document.getElementById("nameFormat");
 const watchDirToggle = document.getElementById("watchDirToggle");
 const debugOutput = document.getElementById("debugOutput");
+const startupToggle = document.getElementById("startupToggle");
+var AutoLauncher = new AutoLaunch({
+    name: 'SlippiReplayFormatter'
+});
+
 
 var watcher;
 let replayPath = "";
@@ -37,6 +43,14 @@ watchDirToggle.onchange = async e => {
         createWatcher(replayPath)
     }
 }   
+
+startupToggle.onchange = async e => {    
+    if(startupToggle.checked) {
+        AutoLauncher.enable();
+    } else {
+        AutoLauncher.disable();
+    }
+}
 
 formatButton.onclick = async function(e) {
     await parseReplays(replayPath, replayFormat, progressBar);
