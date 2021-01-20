@@ -2,7 +2,7 @@
 
 ## How to use:
 1. Select replay directory
-2. Type replay name format (variables below)
+2. Type replay name format or select one of the dropdown templates (variables below)
 3. Click format button to bulk format or check watch dir box for automatic renaming
 
 ### Name Variables:
@@ -24,7 +24,7 @@ Variable | Output
 {p2code} | Port 2's Slippi Code
 
 ### Planned features:
-* Persistent replay name format
+* Bug fixes
 
 ### Potential features:
 * Automatic replay sorting
@@ -39,6 +39,7 @@ Variable | Output
     * Stage
     * Player tag
     * Player code
+* Persistent replay name format
 * Replay name format templates
 * Minimize to tray
 * Launch on PC startup
