@@ -25,7 +25,6 @@ Variable | Output
 
 ### Planned features:
 * Replay name format templates
-* Launch on pc start option
 * Persistent replay name format
 
 ### Potential features:
@@ -35,7 +34,8 @@ Variable | Output
 
 ### Current features:
 * Minimize to tray
-* bulk replay renaming
+* Launch on PC startup
+* Bulk replay renaming
 * Automatic replay renaming
 * Advanced replay renaming
     * Player character
